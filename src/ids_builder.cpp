@@ -344,7 +344,7 @@ Field IDS::decode_field(Field field, std::vector<char> binaryArray)
     // return IDS::convert_int_manually(field._bytesAmount, field._value);
 }
 
-IDS IDS::decode_ids(IDS idsFields, std::vector<char> binaryArray)
+std::vector<Field> IDS::decode_ids(IDS idsFields, std::vector<char> binaryArray)
 {
     if (idsFields.get_total_bytes() != binaryArray.size())
         throw std::invalid_argument("Array size not match the IDS fields");
@@ -362,14 +362,14 @@ IDS IDS::decode_ids(IDS idsFields, std::vector<char> binaryArray)
 
         idsFields._idsFields[i] = IDS::decode_field(idsFields._idsFields[i], fieldBinaryArray);
     }
-    return idsFields;
+    return idsFields._idsFields;
 }
 
-IDS IDS::decode_ids()
+std::vector<Field> IDS::decode_ids()
 {
-    auto decodedIds = IDS::decode_ids(this->_idsFields, this->_binaryArray);
-    this->set_ids(decodedIds._idsFields);
-    return decodedIds;
+    auto decodedFields = IDS::decode_ids(this->_idsFields, this->_binaryArray);
+    this->set_ids(decodedFields);
+    return decodedFields;
 }
 
 void IDS::print_ids(std::vector<char> rawBinaryArray, bool asDecimalNumbersArray)
